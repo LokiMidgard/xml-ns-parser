@@ -106,6 +106,9 @@ function CalculateNS(obj: any, scope?: Scope) {
             // new default namespace
             newScope[''] = attributes["xmlns"];
         }
+        if (typeof newScope[''] === 'undefined') {
+            newScope[''] = '';
+        }
         const valuesForScope = Object.keys(attributes).filter(x => x.startsWith('xmlns:')).map(key => {
             const ns = attributes[key];
             const prefix = key.substring('xmlns:'.length);
@@ -124,7 +127,7 @@ function CalculateNS(obj: any, scope?: Scope) {
                 return { namespace, local, value }
             } else {
                 const namespace = newScope[''];
-                const local = x;
+                const local = x.name;
                 return { namespace, local, value }
             }
         });
