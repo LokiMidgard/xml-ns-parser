@@ -1,4 +1,4 @@
-# xml-parser
+# xml-ns-parser
 A parser for xml that creates a JSON struct which retains all information including attributes and namespaces
 
 # structure
