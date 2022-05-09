@@ -1,18 +1,19 @@
 {
   "name": "xml-ns-parser",
-  "version": "0.0.8",
+  "version": "0.0.10",
   "description": "A parser for xml that creates a JSON struct which retains all information including attributes and namespaces",
   "repository": {
     "type": "git",
     "url": "https://github.com/LokiMidgard/xml-ns-parser.git"
   },
-  "type": "module",
+  "type": "commonjs",
   "homepage": "https://github.com/LokiMidgard/xml-ns-parser",
-  "module": "dist/index.js",
+  "main": "dist/index.js",
   "typings": "dist/index.d.ts",
   "scripts": {
     "build": "tsc",
-    "test": "ts-mocha -n loader=ts-node/esm -p tsconfig.json --reporter spec test/**/*.ts"
+    "prepublish": "npm build",
+    "test": "ts-mocha  -p tsconfig.json --reporter spec test/**/*.ts"
   },
   "files": [
     "dist"

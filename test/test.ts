@@ -1,4 +1,4 @@
-import * as m from './../src/index.js'
+import * as m from './../src/index'
 
 
 import * as mocha from 'mocha';
