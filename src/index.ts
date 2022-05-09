@@ -118,21 +118,7 @@ function CalculateNS(obj: any, scope?: Scope) {
             newScope[prefix] = ns;
         }
         const filterdAttributes = Object.entries(attributes).filter(x => x[0] !== 'xmlns' && !x[0].startsWith('xmlns:')).map(x => { return { name: x[0], value: x[1] }; });
-        const namspacedAttributes = filterdAttributes.map(x => {
-            const value = x.value;
-            if (x.name.includes(':')) {
-                const splited = x.name.split(':');
-                const namespace = newScope[splited[0]];
-                const local = splited[1];
-                return { namespace, local, value }
-            } else {
-                const namespace = newScope[''];
-                const local = x.name;
-                return { namespace, local, value }
-            }
-        });
-        const mapedAttributes = Object.fromEntries([...new Set(namspacedAttributes.map(x => x.namespace))].map(x => [x, Object.fromEntries(namspacedAttributes.filter(y => y.namespace === x).map(y => [y.local, y.value]))]));
-        obj['attributes'] = mapedAttributes;
+        obj['attributes'] = Object.fromEntries(filterdAttributes.map(x => [x.name, x.value]));
         delete obj[':@'];
     } else {
         obj['attributes'] = {}
@@ -165,7 +151,7 @@ export function getTagname(name: string, scope: Scope, includeDefaultTypes: bool
         return { local: name, namespace: '' };
     } else {
         // we use default prefix
-        return { local: name, namespace: scope[''] ?? '' };
+        return { local: name, namespace: (scope ? scope[''] : undefined) ?? '' };
     }
 
 }
@@ -178,9 +164,7 @@ export type Xml = {
 
     children: Xml[],
     attributes: {
-        [ns: string]: {
-            [name: string]: string
-        }
+        [name: string]: string
     },
     name: TagName,
     scope: Scope,

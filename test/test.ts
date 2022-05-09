@@ -1,4 +1,4 @@
-import * as m from './../src/index'
+import * as m from './../src/index.js'
 
 
 import * as mocha from 'mocha';
@@ -17,11 +17,11 @@ describe('Parse', () => {
 
     it('should be able to parse namespaces correctly', () => {
         const parsed = m.parseXml(`<Persons xmlns='https://person.org' xmlns:address='https://address.org' xmlns:age='https://age.org'>
-        <Person name='Mike' age:age='20'>
+        <Person name='Mike' age='20'>
             <Frind>Paul</Frind>
             <Frind>Sebastian</Frind>
         </Person>
-        <Person name='Paul' age:age='22'>
+        <Person name='Paul' age='22'>
             <Frind>Mike</Frind>
             <address:street>Main Street 3</address:street>
         </Person>
@@ -60,12 +60,8 @@ describe('Parse', () => {
                         }
                     ],
                     "attributes": {
-                        "https://person.org": {
-                            "name": "Mike"
-                        },
-                        "https://age.org": {
-                            "age": "20"
-                        }
+                        "name": "Mike",
+                        "age": "20"
                     },
                     "name": {
                         "local": "Person",
@@ -109,12 +105,8 @@ describe('Parse', () => {
                         }
                     ],
                     "attributes": {
-                        "https://person.org": {
-                            "name": "Paul"
-                        },
-                        "https://age.org": {
-                            "age": "22"
-                        }
+                        "name": "Paul",
+                        "age": "22"
                     },
                     "name": {
                         "local": "Person",
@@ -146,7 +138,7 @@ describe('Parse', () => {
         const parsed = m.parseXml(`<Test foo='bar'/>`);
         const expected = {
             "children": [],
-            "attributes": { '': { 'foo': 'bar' } },
+            "attributes": { 'foo': 'bar' },
             "name": {
                 "local": "Test",
                 "namespace": ""

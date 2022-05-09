@@ -1,28 +1,37 @@
 {
   "name": "xml-ns-parser",
-  "version": "0.0.6",
+  "version": "0.0.8",
   "description": "A parser for xml that creates a JSON struct which retains all information including attributes and namespaces",
   "repository": {
     "type": "git",
     "url": "https://github.com/LokiMidgard/xml-ns-parser.git"
   },
+  "type": "module",
   "homepage": "https://github.com/LokiMidgard/xml-ns-parser",
-  "module": "./dist/index.js",
+  "module": "dist/index.js",
+  "typings": "dist/index.d.ts",
   "scripts": {
     "build": "tsc",
-    "test": "mocha --reporter spec --require ts-node/register test/**/*.ts"
+    "test": "ts-mocha -n loader=ts-node/esm -p tsconfig.json --reporter spec test/**/*.ts"
   },
-  "files": ["dist"],
-  "keywords": ["parser", "xml-namespace", "xml-parser"],
+  "files": [
+    "dist"
+  ],
+  "keywords": [
+    "parser",
+    "xml-namespace",
+    "xml-parser"
+  ],
   "author": "Patrick Kranz",
   "license": "MIT",
   "devDependencies": {
     "@types/chai": "^4.3.1",
     "@types/chai-like": "^1.1.1",
+    "@types/expect": "^24.3.0",
     "@types/mocha": "^9.1.1",
     "chai": "^4.3.6",
     "chai-like": "^1.1.1",
-    "mocha": "^10.0.0",
+    "ts-mocha": "^10.0.0",
     "ts-node": "^10.7.0",
     "typescript": "^4.6.4"
   },

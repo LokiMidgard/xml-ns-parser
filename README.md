@@ -8,8 +8,7 @@ Every xml element will be transformed in a JSON object that contains the propert
 - `children`  
   is an array of the child elements
 - `attributes`  
-  contains the attributes which are grouped by namespace. The Object beneth `attributes` has one property for every namespace an attribute on this element has.
-  The value of those objects have one property for each attribute in that namespace with the name of the local name of the attribute and the value with the value.
+  contains the attributes. Its a attribute-name value map.
 - `name`  
   has a `local` and a `namespace` property. Where `local` contains the local name of the element and `namespace` the namespace
 - `scope`  
@@ -27,9 +26,7 @@ will translate to the JSON
 {
  "children": [],
  "attributes": {
-  "": {
    "foo": "bar"
-  }
  },
  "name": {
   "local": "test",
@@ -47,11 +44,11 @@ Or a more complex samlpe that utilise namespaces
 
 ```xml
 <Persons xmlns='https://person.org' xmlns:address='https://address.org' xmlns:age='https://age.org'>
-    <Person name='Mike' age:age='20'>
+    <Person name='Mike' age='20'>
         <Frind>Paul</Frind>
         <Frind>Sebastian</Frind>
     </Person>
-    <Person name='Paul' age:age='22'>
+    <Person name='Paul' age='22'>
         <Frind>Mike</Frind>
         <address:street>Main Street 3</address:street>
     </Person>
@@ -92,12 +89,8 @@ Or a more complex samlpe that utilise namespaces
     }
    ],
    "attributes": {
-    "https://person.org": {
-     "name": "Mike"
-    },
-    "https://age.org": {
+     "name": "Mike",
      "age": "20"
-    }
    },
    "name": {
     "local": "Person",
@@ -141,12 +134,8 @@ Or a more complex samlpe that utilise namespaces
     }
    ],
    "attributes": {
-    "https://person.org": {
-     "name": "Paul"
-    },
-    "https://age.org": {
+     "name": "Paul",
      "age": "22"
-    }
    },
    "name": {
     "local": "Person",
