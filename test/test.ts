@@ -15,6 +15,16 @@ chai.use(chaiLike);
 const expect = chai.expect;
 describe('Parse', () => {
 
+    it('should be able to parse empty elements', () => {
+        const parsed = m.parseXml(`<Persons></Persons>`);
+                expect(parsed.text).to.be.empty;
+    });
+    
+    it('should have text', () => {
+        const parsed = m.parseXml(`<Persons>2</Persons>`);
+                expect(parsed.text).to.be.a('string').that.equals('2');
+    });
+
     it('should be able to parse namespaces correctly', () => {
         const parsed = m.parseXml(`<Persons xmlns='https://person.org' xmlns:address='https://address.org' xmlns:age='https://age.org'>
         <Person name='Mike' age='20'>

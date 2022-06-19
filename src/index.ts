@@ -175,6 +175,13 @@ function CalculateNS(obj: any, scope?: Scope) {
         obj['text'] = ['#text'];
         delete obj['#text'];
     }
+
+    if (obj['text'] == undefined) {
+        obj['text'] = '';
+    } else if (typeof obj['text'] !== 'string') {
+        obj['text'] = obj['text'].toString();
+    }
+
     const attributes = obj[':@'];
     if (attributes) {
         if (attributes["xmlns"]) {
@@ -243,7 +250,7 @@ export type Xml = {
     },
     name: TagName,
     scope: Scope,
-    text?: undefined | string,
+    text: string,
 }
 export type TagName = {
     local: string,
