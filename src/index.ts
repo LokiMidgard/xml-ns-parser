@@ -73,6 +73,81 @@ export function parseXml(xmlText: string): Xml {
     return xml;
 }
 
+type writeOptions = { pretty: boolean, indent: number, quote: string }
+
+const defaultWriteOptions: writeOptions = {
+    pretty: true,
+    indent: 2,
+    quote: '\''
+}
+
+export function writeXml(xml: Xml, options?: Partial<writeOptions>): string {
+    options ??= {};
+    const effectivOptions = { ...defaultWriteOptions, ...options };
+
+    const text = writeXmlInternal(xml, {}, effectivOptions, 0);
+    if (options.pretty) {
+        return prettifyXml(text)
+    } else {
+        return text;
+    }
+}
+function writeXmlInternal(xml: Xml, scope: Scope, options: writeOptions, indent: number): string {
+
+
+    const addedScope =
+        Object.fromEntries(Object.entries(xml.scope).filter(([perfix, ns]) => {
+            return scope[perfix] == undefined || scope[perfix] != ns;
+        }))
+    const newScope = { ...scope, ...addedScope };
+
+
+    const tagName = xml.name.namespace == newScope['']
+        ? xml.name.local
+        : `${Object.entries(scope).filter(([prefix, ns]) => xml.name.namespace == ns)[0][0]}:${xml.name.local}`;
+
+    const namespaces = Object.entries(addedScope).map(([perfix, ns]) => perfix == '' ? `xmlns=${options.quote}${ns}${options.quote}` : `xmlns:${perfix}=${options.quote}${ns}${options.quote}`);
+
+    const attributes = Object.entries(xml.attributes).map(([name, value]) => `${name}=${options.quote}${value}${options.quote}`);
+
+    const indentionSting = `${options.pretty ? '\n' : ''}${Array.from({ length: options.pretty ? indent : 0 }, () => ' ').join('')}`;
+    const content = xml.text !== undefined
+        ? xml.text
+        : xml.children.map(c => Array.from({ length: options.pretty ? options.indent : 0 }, () => ' ').join('') + writeXmlInternal(c, newScope, options, indent + options.indent)).join(indentionSting);
+
+    if (content) {
+        if (xml.text !== undefined)
+            return `<${[tagName, ...namespaces, ...attributes].join(' ')}>${content}</${tagName}>`
+        return `<${[tagName, ...namespaces, ...attributes].join(' ')}>${indentionSting}${content}${indentionSting}</${tagName}>`
+    } else {
+        return `<${tagName} ${namespaces} ${attributes} />`
+    }
+
+
+}
+
+function prettifyXml(sourceXml: string) {
+    var xmlDoc = new DOMParser().parseFromString(sourceXml, 'application/xml');
+    var xsltDoc = new DOMParser().parseFromString([
+        // describes how we want to modify the XML - indent everything
+        '<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform">',
+        '  <xsl:strip-space elements="*"/>',
+        '  <xsl:template match="para[content-style][not(text())]">', // change to just text() to strip space in text nodes
+        '    <xsl:value-of select="normalize-space(.)"/>',
+        '  </xsl:template>',
+        '  <xsl:template match="node()|@*">',
+        '    <xsl:copy><xsl:apply-templates select="node()|@*"/></xsl:copy>',
+        '  </xsl:template>',
+        '  <xsl:output indent="yes"/>',
+        '</xsl:stylesheet>',
+    ].join('\n'), 'application/xml');
+
+    var xsltProcessor = new XSLTProcessor();
+    xsltProcessor.importStylesheet(xsltDoc);
+    var resultDoc = xsltProcessor.transformToDocument(xmlDoc);
+    var resultXml = new XMLSerializer().serializeToString(resultDoc);
+    return resultXml;
+};
 
 function CalculateNS(obj: any, scope?: Scope) {
     if (!scope) {
@@ -168,7 +243,7 @@ export type Xml = {
     },
     name: TagName,
     scope: Scope,
-    text: undefined | string,
+    text?: undefined | string,
 }
 export type TagName = {
     local: string,

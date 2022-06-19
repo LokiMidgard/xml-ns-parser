@@ -152,3 +152,237 @@ describe('Parse', () => {
     });
 
 });
+describe('Write', () => {
+
+    it('should be able to be pretty', () => {
+        const expected = `<Persons xmlns='https://person.org' xmlns:address='https://address.org' xmlns:age='https://age.org'>
+    <Person name='Mike' age='20'>
+        <Frind>Paul</Frind>
+        <Frind>Sebastian</Frind>
+    </Person>
+    <Person name='Paul' age='22'>
+        <Frind>Mike</Frind>
+        <address:street>Main Street 3</address:street>
+    </Person>
+</Persons>`;
+        
+        const input :m.Xml = {
+            "children": [
+                {
+                    "children": [
+                        {
+                            "children": [],
+                            "text": "Paul",
+                            "attributes": {},
+                            "name": {
+                                "local": "Frind",
+                                "namespace": "https://person.org"
+                            },
+                            "scope": {
+                                "": "https://person.org",
+                                "address": "https://address.org",
+                                "age": "https://age.org"
+                            }
+                        },
+                        {
+                            "children": [],
+                            "text": "Sebastian",
+                            "attributes": {},
+                            "name": {
+                                "local": "Frind",
+                                "namespace": "https://person.org"
+                            },
+                            "scope": {
+                                "": "https://person.org",
+                                "address": "https://address.org",
+                                "age": "https://age.org"
+                            }
+                        }
+                    ],
+                    "attributes": {
+                        "name": "Mike",
+                        "age": "20"
+                    },
+                    "name": {
+                        "local": "Person",
+                        "namespace": "https://person.org"
+                    },
+                    "scope": {
+                        "": "https://person.org",
+                        "address": "https://address.org",
+                        "age": "https://age.org"
+                    }
+                },
+                {
+                    "children": [
+                        {
+                            "children": [],
+                            "text": "Mike",
+                            "attributes": {},
+                            "name": {
+                                "local": "Frind",
+                                "namespace": "https://person.org"
+                            },
+                            "scope": {
+                                "": "https://person.org",
+                                "address": "https://address.org",
+                                "age": "https://age.org"
+                            }
+                        },
+                        {
+                            "children": [],
+                            "text": "Main Street 3",
+                            "attributes": {},
+                            "name": {
+                                "local": "street",
+                                "namespace": "https://address.org"
+                            },
+                            "scope": {
+                                "": "https://person.org",
+                                "address": "https://address.org",
+                                "age": "https://age.org"
+                            }
+                        }
+                    ],
+                    "attributes": {
+                        "name": "Paul",
+                        "age": "22"
+                    },
+                    "name": {
+                        "local": "Person",
+                        "namespace": "https://person.org"
+                    },
+                    "scope": {
+                        "": "https://person.org",
+                        "address": "https://address.org",
+                        "age": "https://age.org"
+                    }
+                }
+            ],
+            "attributes": {},
+            "name": {
+                "local": "Persons",
+                "namespace": "https://person.org"
+            },
+            "scope": {
+                "": "https://person.org",
+                "address": "https://address.org",
+                "age": "https://age.org"
+            }
+        };
+        const parsed = m.writeXml(input, {indent:4});
+        expect(parsed).like(expected);
+    });
+    it('should be able to be compact', () => {
+        const expected = `<Persons xmlns='https://person.org' xmlns:address='https://address.org' xmlns:age='https://age.org'><Person name='Mike' age='20'><Frind>Paul</Frind><Frind>Sebastian</Frind></Person><Person name='Paul' age='22'><Frind>Mike</Frind><address:street>Main Street 3</address:street></Person></Persons>`;
+        
+        const input :m.Xml = {
+            "children": [
+                {
+                    "children": [
+                        {
+                            "children": [],
+                            "text": "Paul",
+                            "attributes": {},
+                            "name": {
+                                "local": "Frind",
+                                "namespace": "https://person.org"
+                            },
+                            "scope": {
+                                "": "https://person.org",
+                                "address": "https://address.org",
+                                "age": "https://age.org"
+                            }
+                        },
+                        {
+                            "children": [],
+                            "text": "Sebastian",
+                            "attributes": {},
+                            "name": {
+                                "local": "Frind",
+                                "namespace": "https://person.org"
+                            },
+                            "scope": {
+                                "": "https://person.org",
+                                "address": "https://address.org",
+                                "age": "https://age.org"
+                            }
+                        }
+                    ],
+                    "attributes": {
+                        "name": "Mike",
+                        "age": "20"
+                    },
+                    "name": {
+                        "local": "Person",
+                        "namespace": "https://person.org"
+                    },
+                    "scope": {
+                        "": "https://person.org",
+                        "address": "https://address.org",
+                        "age": "https://age.org"
+                    }
+                },
+                {
+                    "children": [
+                        {
+                            "children": [],
+                            "text": "Mike",
+                            "attributes": {},
+                            "name": {
+                                "local": "Frind",
+                                "namespace": "https://person.org"
+                            },
+                            "scope": {
+                                "": "https://person.org",
+                                "address": "https://address.org",
+                                "age": "https://age.org"
+                            }
+                        },
+                        {
+                            "children": [],
+                            "text": "Main Street 3",
+                            "attributes": {},
+                            "name": {
+                                "local": "street",
+                                "namespace": "https://address.org"
+                            },
+                            "scope": {
+                                "": "https://person.org",
+                                "address": "https://address.org",
+                                "age": "https://age.org"
+                            }
+                        }
+                    ],
+                    "attributes": {
+                        "name": "Paul",
+                        "age": "22"
+                    },
+                    "name": {
+                        "local": "Person",
+                        "namespace": "https://person.org"
+                    },
+                    "scope": {
+                        "": "https://person.org",
+                        "address": "https://address.org",
+                        "age": "https://age.org"
+                    }
+                }
+            ],
+            "attributes": {},
+            "name": {
+                "local": "Persons",
+                "namespace": "https://person.org"
+            },
+            "scope": {
+                "": "https://person.org",
+                "address": "https://address.org",
+                "age": "https://age.org"
+            }
+        };
+        const parsed = m.writeXml(input, {pretty:false});
+        expect(parsed).like(expected);
+    });
+
+
+});
