@@ -12,7 +12,7 @@
   "typings": "dist/index.d.ts",
   "scripts": {
     "build": "tsc",
-    "prepublishOnly": "npm build",
+    "prepublishOnly": "npm run build",
     "test": "ts-mocha  -p tsconfig.json --reporter spec test/**/*.ts"
   },
   "files": [
