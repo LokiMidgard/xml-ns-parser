@@ -56,7 +56,7 @@ const builtInXsdtypes = [
 ]
 
 
-export function parseXml(xmlText: string): Xml {
+export function parseXml(xmlText: string, entityLookup: (path: string) => string): Xml {
     const parser = new XMLParser({
         allowBooleanAttributes: true,
         ignoreAttributes: false,
@@ -67,6 +67,18 @@ export function parseXml(xmlText: string): Xml {
         // isArray: ()=> true,
         preserveOrder: true
     });
+
+    const entityReg = /<!ENTITY (?<key>[^ ]) SYSTEM "(?<path>[^"]*)">/g;
+
+    for (const match of xmlText.matchAll(entityReg)) {
+        const key = match.groups?.['key'];
+        const path = match.groups?.['path'];
+        if (key && path) {
+            parser.addEntity(key, entityLookup(path));
+        }
+    }
+
+
     const data = parser.parse(xmlText);
 
     const xml = CalculateNS(data[0]);

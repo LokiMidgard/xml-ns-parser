@@ -1,6 +1,6 @@
 {
   "name": "xml-ns-parser",
-  "version": "0.0.12",
+  "version": "0.0.13",
   "description": "A parser for xml that creates a JSON struct which retains all information including attributes and namespaces",
   "repository": {
     "type": "git",
