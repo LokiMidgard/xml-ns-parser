@@ -56,7 +56,7 @@ const builtInXsdtypes = [
 ]
 
 
-export function parseXml(xmlText: string, entityLookup: (path: string) => string): Xml {
+export async function parseXml(xmlText: string, entityLookup: (path: string) => Promise<string>): Promise<Xml> {
     const parser = new XMLParser({
         allowBooleanAttributes: true,
         ignoreAttributes: false,
@@ -74,7 +74,7 @@ export function parseXml(xmlText: string, entityLookup: (path: string) => string
         const key = match.groups?.['key'];
         const path = match.groups?.['path'];
         if (key && path) {
-            parser.addEntity(key, entityLookup(path));
+            parser.addEntity(key, await entityLookup(path));
         }
     }
 
