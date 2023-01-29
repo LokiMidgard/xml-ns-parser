@@ -68,7 +68,7 @@ export async function parseXml(xmlText: string, entityLookup: (path: string) => 
         preserveOrder: true
     });
 
-    const entityReg = /<!ENTITY (?<key>[^ ]) SYSTEM "(?<path>[^"]*)">/g;
+    const entityReg = /<!ENTITY\s+(?<key>[^\s]+)\s+SYSTEM\s+"(?<path>[^"]*)">/gm;
 
     for (const match of xmlText.matchAll(entityReg)) {
         const key = match.groups?.['key'];
